@@ -1,2 +1,2 @@
 # Laser-Defender
-Just another siple game made on unity
+Just another simple game made on unity.
