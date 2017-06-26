@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour {
 	public float padding = 1f;
 	public float projectileSpeed = 5f;
 	public float firingRate = 0.2f;
+	public float health = 500f;
 	public GameObject projectileGameObject;
 
 	float xmin;
@@ -25,8 +26,10 @@ public class PlayerController : MonoBehaviour {
 		xmax = rightmost.x - padding;
 	}
 
+
 	void Fire(){
-		GameObject beam = Instantiate (projectileGameObject, transform.position, Quaternion.identity) as GameObject;
+		Vector3 startPosition = transform.position + new Vector3 (0, 1, 0);
+		GameObject beam = Instantiate (projectileGameObject, startPosition, Quaternion.identity) as GameObject;
 		beam.GetComponent<Rigidbody2D> ().velocity = new Vector3 (0, projectileSpeed, 0);
 	}
 
@@ -53,5 +56,16 @@ public class PlayerController : MonoBehaviour {
 
 		transform.position = new Vector3 (newX, transform.position.y, 0);
 	}
-		
+
+	void OnTriggerEnter2D(Collider2D collider){
+		Projectile projectile = collider.GetComponent<Projectile> ();
+
+		if (projectile) {
+			health -= projectile.GetDamage ();
+			if (health <= 0) {
+				Destroy (gameObject);			
+			}
+			projectile.Hit ();
+		}
+	}	
 }
