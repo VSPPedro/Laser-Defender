@@ -21,6 +21,11 @@ public class EnemySpawner : MonoBehaviour {
 		xMax = rightBoundary.x;
 		xMin = leftBoundary.x;
 
+		SpawnEnemies ();
+	}
+
+	void SpawnEnemies()
+	{
 		foreach (Transform child in transform) {
 			GameObject enemy = Instantiate (enemyPrefab, child.transform.position, Quaternion.identity);
 			enemy.transform.parent = child;
@@ -47,5 +52,22 @@ public class EnemySpawner : MonoBehaviour {
 		} else if (rightEdgeOfFormation > xMax){
 			movingRight = false;
 		}
+
+		if (AllMembersDead ()) {
+			Debug.Log ("Empty Formation!");
+			SpawnEnemies ();
+		}
+	}
+
+	bool AllMembersDead(){
+
+		foreach (Transform childPosiitionGameObject in transform) {
+			if (childPosiitionGameObject.childCount > 1)
+				return false;
+		}
+		
+		return true;
 	}
 }
+
+
