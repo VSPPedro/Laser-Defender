@@ -8,6 +8,7 @@ public class EnemySpawner : MonoBehaviour {
 	public float width = 10f;
 	public float height = 5f;
 	public float speed = 2f;
+	public float spawnDelay = 1f;
 
 	private bool movingRight = false;
 	private float xMax;
@@ -21,7 +22,7 @@ public class EnemySpawner : MonoBehaviour {
 		xMax = rightBoundary.x;
 		xMin = leftBoundary.x;
 
-		SpawnEnemies ();
+		SpawnUtilFull();
 	}
 
 	void SpawnEnemies()
@@ -29,6 +30,19 @@ public class EnemySpawner : MonoBehaviour {
 		foreach (Transform child in transform) {
 			GameObject enemy = Instantiate (enemyPrefab, child.transform.position, Quaternion.identity);
 			enemy.transform.parent = child;
+		}
+	}
+
+	void SpawnUtilFull(){
+		Transform nextPosition = NextFreePosition ();
+
+		if (nextPosition) {
+			GameObject enemy = Instantiate (enemyPrefab, nextPosition.position, Quaternion.identity);
+			enemy.transform.parent = nextPosition;
+		}
+
+		if (NextFreePosition ()) {
+			Invoke ("SpawnUtilFull", spawnDelay);
 		}
 	}
 
@@ -55,8 +69,17 @@ public class EnemySpawner : MonoBehaviour {
 
 		if (AllMembersDead ()) {
 			Debug.Log ("Empty Formation!");
-			SpawnEnemies ();
+			SpawnUtilFull ();
 		}
+	}
+
+
+	Transform NextFreePosition(){
+		foreach (Transform childPositionGameObject in transform) {
+			if (childPositionGameObject.childCount == 1)
+				return childPositionGameObject;
+		}
+		return null;	
 	}
 
 	bool AllMembersDead(){
