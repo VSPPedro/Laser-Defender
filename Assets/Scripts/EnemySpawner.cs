@@ -76,16 +76,18 @@ public class EnemySpawner : MonoBehaviour {
 
 	Transform NextFreePosition(){
 		foreach (Transform childPositionGameObject in transform) {
-			if (childPositionGameObject.childCount == 0)
+			if (childPositionGameObject.childCount == 0) {
 				return childPositionGameObject;
+			}
+				
 		}
 		return null;	
 	}
 
 	bool AllMembersDead(){
 
-		foreach (Transform childPosiitionGameObject in transform) {
-			if (childPosiitionGameObject.childCount > 1)
+		foreach (Transform childPositionGameObject in transform) {
+			if (childPositionGameObject.childCount > 0)
 				return false;
 		}
 		
