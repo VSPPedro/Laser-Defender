@@ -76,7 +76,7 @@ public class EnemySpawner : MonoBehaviour {
 
 	Transform NextFreePosition(){
 		foreach (Transform childPositionGameObject in transform) {
-			if (childPositionGameObject.childCount == 1)
+			if (childPositionGameObject.childCount == 0)
 				return childPositionGameObject;
 		}
 		return null;	
